@@ -140,19 +140,46 @@ class KnowledgeBase(object):
         Returns:
             string explaining hierarchical support from other Facts and rules
         """
-        str = ''
+        s = '' #string
 
         # FACTS
         if isinstance(fact_or_rule, Fact):
+            fact = fact_or_rule
+
             # Make sure fact is in KB
-            if fact_or_rule not in self.facts:
+            if fact not in self.facts:
                 return "Fact is not in the KB"
+
+            # s == fact: (
+            s += 'fact: ('
+
+            # str == fact: (pred
+            s += fact.statement.predicate
+
+            # str == fact: (pred term1 term2 term3
+            for term in fact.statement.terms:
+                s += ' '
+                s += str(term)
+
+            # str == fact: (pred term1 term2 term3)
+            s += ')'
+
+            # str == fact: (pred term1 term2 term3) ASSERTED
+            if fact.asserted == False:
+                s += ' ASSERTED'
+
+                
+            print(s)
+            return s
         # RULES
         elif isinstance(fact_or_rule, Rule):
+            rule = fact_or_rule
+
             # Make sure rule is in KB
-            if fact_or_rule not in self.rules:
+            if rule not in self.rules:
                 return "Rule is not in the KB"
 
+            return s
         else:
             return False
 
