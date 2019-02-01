@@ -141,117 +141,62 @@ class KnowledgeBase(object):
             string explaining hierarchical support from other Facts and rules
         """
         s = ''  # string
-
         # FACTS
         if isinstance(fact_or_rule, Fact):
-
-            # Make sure fact is in KB
-            if fact_or_rule not in self.facts:
+            if fact_or_rule not in self.facts:  # Make sure fact is in KB
                 return "Fact is not in the KB"
-
-            # Find fact in KB
-            ind = self.facts.index(fact_or_rule)
+            ind = self.facts.index(fact_or_rule)  # Find fact in KB
             fact = self.facts[ind]
-
-            # fact: (
-            s += 'fact: ('
-
-            # fact: (pred
-            s += fact.statement.predicate
-
-            # fact: (pred term1 term2 term3
-            for term in fact.statement.terms:
+            s += 'fact: ('  # fact: (
+            s += fact.statement.predicate  # fact: (pred
+            for term in fact.statement.terms:  # fact: (pred term1 term2 term3
                 s += ' '
                 s += str(term)
-
-            # fact: (pred term1 term2 term3)
-            s += ')'
-
-            # fact: (pred term1 term2 term3) ASSERTED
-            if fact.asserted:
+            s += ')'  # fact: (pred term1 term2 term3)
+            if fact.asserted:  # fact: (pred term1 term2 term3) ASSERTED
                 s += ' ASSERTED'
-
-            # Spacing tracker
-            pad = '\n  '
-
+            pad = '\n  '  # Spacing tracker
             # SUPPORTED BY
             if len(fact.supported_by) != 0:
-                s += pad
-                s += 'SUPPORTED BY'
                 for lists in fact.supported_by:
+                    s = s + pad + 'SUPPORTED BY'
                     for item in lists:
                         s += self.kb_explain_recursive(item, pad)
-
+            print(s)
             return s
-
         # RULES
         elif isinstance(fact_or_rule, Rule):
-            # Make sure rule is in KB
-            if fact_or_rule not in self.rules:
+            if fact_or_rule not in self.rules:  # Make sure rule is in KB
                 return "Rule is not in the KB"
-
-            # Find rule in KB
-            ind = self.rules.index(fact_or_rule)
+            ind = self.rules.index(fact_or_rule)  # Find rule in KB
             rule = self.rules[ind]
-
             # LEFT HAND SIDE
-
-            # rule: (
-            s += 'rule: ('
-
-            # rule: ((eats term1 term2), (eats term1 term2),
-            for statement in rule.lhs:
-
-                # rule: ((
-                s += '('
-
-                # rule: ((eats
-                s += statement.predicate
-
-                # rule: ((eats term1 term2
-                for term in statement.terms:
+            s += 'rule: ('  # rule: (
+            for statement in rule.lhs:  # rule: ((eats term1 term2), (eats term1 term2),
+                s += '('  # rule: ((
+                s += statement.predicate  # rule: ((eats
+                for term in statement.terms:  # rule: ((eats term1 term2
                     s += ' '
                     s += str(term)
-
-                # rule: ((eats term1 term2),
-                s += '), '
-
-            # rule: ((eats term1 term2), (eats term1 term2)
-            # aka backspace two
-            s = s[:-2]
-
-            # rule: ((eats term1 term2), (eats term1 term2)) -> (
-            s += ') -> ('
-
+                s += '), '  # rule: ((eats term1 term2),
+            s = s[:-2]  # rule: ((eats term1 term2), (eats term1 term2) aka backspace two
+            s += ') -> ('  # rule: ((eats term1 term2), (eats term1 term2)) -> (
             # RIGHT HAND SIDE
-
-            # rule: ((eats term1 term2), (eats term1 term2)) -> (eats
-            s += rule.rhs.predicate
-
-            # rule: ((eats term1 term2), (eats term1 term2)) -> (eats term1 term2
-            for term in rule.rhs.terms:
+            s += rule.rhs.predicate  # rule: ((eats term1 term2), (eats term1 term2)) -> (eats
+            for term in rule.rhs.terms:  # rule: ((eats term1 term2), (eats term1 term2)) -> (eats term1 term2
                 s += ' '
                 s += str(term)
-
-            # rule: ((eats term1 term2), (eats term1 term2)) -> (eats term1 term2)
-            s += ')'
-
-            # ASSERTED
-            if rule.asserted:
+            s += ')'  # rule: ((eats term1 term2), (eats term1 term2)) -> (eats term1 term2)
+            if rule.asserted: # ASSERTED
                 s += ' ASSERTED'
-
-            # Spacing tracker
-            pad = '\n  '
-
+            pad = '\n  '  # Spacing tracker
             # SUPPORTED BY
             if len(rule.supported_by) != 0:
-                s += pad
-                s += 'SUPPORTED BY'
                 for lists in rule.supported_by:
+                    s = s + pad + 'SUPPORTED BY'
                     for item in lists:
                         s += '\n  '
                         s += self.kb_explain_recursive(item, pad)
-
             return s
         else:
             return False
@@ -299,11 +244,9 @@ class KnowledgeBase(object):
             # SUPPORTED BY
             if len(fact.supported_by) != 0:
                 pad += '  '
-                s += pad
-                s += 'SUPPORTED BY'
                 for lists in fact.supported_by:
+                    s = s + pad + 'SUPPORTED BY'
                     for item in lists:
-                        s += '\n  '
                         s += self.kb_explain_recursive(item, pad)
 
             return s
@@ -367,11 +310,9 @@ class KnowledgeBase(object):
             # SUPPORTED BY
             if len(rule.supported_by) != 0:
                 pad += '  '
-                s += pad
-                s += 'SUPPORTED BY'
                 for lists in rule.supported_by:
+                    s = s + pad + 'SUPPORTED BY'
                     for item in lists:
-                        s += '\n  '
                         s += self.kb_explain_recursive(item, pad)
             return s
         else:
