@@ -195,7 +195,6 @@ class KnowledgeBase(object):
                 for lists in rule.supported_by:
                     s = s + pad + 'SUPPORTED BY'
                     for item in lists:
-                        s += '\n  '
                         s += self.kb_explain_recursive(item, pad)
             return s
         else:
